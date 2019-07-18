@@ -1,3 +1,39 @@
-<p>
-  view-user works!
-</p>
+
+
+<div class="container">
+  
+  <form  name = "userForm">
+    <div class="form-group">
+      <label for="userId">User ID</label>
+      <input type="number" class="form-control" id="userId" name="userId" [(ngModel)]="viewUser.user_id" [disabled]="true">
+    </div>
+
+    <div class="form-group">
+      <label for="userName">User Name</label>
+      <input type="text" class="form-control" id="userName" name="userName" [(ngModel)]="viewUser.user_name" [disabled]="true">
+    </div>
+
+    <div class="form-group">
+      <label for="firstName">First Name</label>
+      <input type="text" class="form-control" id="firstName" name="firstName" [(ngModel)]="viewUser.first_name" [disabled]="true">
+    </div>
+
+    <div class="form-group">
+      <label for="lastName">Last Name</label>
+      <input type="text" class="form-control" id="lastName" name="lastName" [(ngModel)]="viewUser.last_name" [disabled]="true">
+    </div>
+
+    <div class="form-group">
+      <label for="adress">Adress</label>
+      <input type="text" class="form-control" id="adress" name="adress" [(ngModel)]="viewUser.adress" [disabled]="true">
+    </div>
+
+    <div class="form-group">
+      <label for="contact">Contact</label>
+      <input type="Number" class="form-control" id="contact" name="contact" [(ngModel)]="viewUser.contact_number" [disabled]="true">
+    </div>
+  </form>
+  <div style="margin-bottom: 10px;margin-top: 10px;">
+    <button type="submit" class="btn btn-primary" (click)="goBack()">BACK</button>
+  </div>
+</div>

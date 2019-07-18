@@ -14,11 +14,29 @@ export class UserListComponent implements OnInit {
 
   public UserList = [];
 
+  constructor(private userService : UserServiceService, private router: Router) { }
+
   addUser(){
     this.router.navigateByUrl('createUser');
   }
+  updateUser(user){
+    this.userService.setFormData(user);
+    this.router.navigateByUrl('updateUser');
+  }
+  viewUser(user){
+    this.userService.setFormData(user);
+    this.router.navigateByUrl('viewUser');
+  }
+  deleteUser(id, user){
+    this.userService.deleteUser(user).subscribe((data)=>{
+      if(data.success){
+          this.UserList.splice(id,1);
+      }
+    })
+    
+  }
 
-  constructor(private userService : UserServiceService, private router: Router) { }
+  
 
   ngOnInit() {
 

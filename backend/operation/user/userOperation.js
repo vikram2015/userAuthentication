@@ -17,6 +17,7 @@ let saveNewUser = (parameter)=>{
             }
         }).catch((err)=>{
             console.log('Error Occur : '+err);
+            reject(err);
         });
     });
 };
@@ -38,6 +39,7 @@ let getAllUser = ()=>{
             }
         }).catch((err)=>{
             console.log('Error in getting the user details');
+            reject(err);
         });
     });
 };
@@ -49,8 +51,15 @@ let getAllUser = ()=>{
  */
 let updateUser = (id, parameter)=>{
     return new Promise((resolve, reject)=>{
-
-    })
+        UserModel.findByIdAndUpdate(id, { $set : parameter })
+        .exec()
+        .then((updatedRecord)=>{
+            resolve(updatedRecord)
+        }).catch((err)=>{
+            console.log('Error in getting the user details');
+            reject(err);
+        });
+    });
 };
 
 
@@ -59,17 +68,47 @@ let updateUser = (id, parameter)=>{
  * This is for delete the new user
  * 
  */
-let deleteUser = (id)=>{
+let deleteUser = (id, userDetails)=>{
     return new Promise((resolve, reject)=>{
-
+        UserModel.findByIdAndUpdate(id, { $set: userDetails }).then((data) => {
+            console.log('data in operation file')
+            console.log(data)
+            resolve(data)
+        }).catch((err)=>{
+            console.log('Error in deleting the user');
+            reject(err);
+        })
     })
 };
 
+
+/**
+ * 
+ * This is for getting selected user
+ * 
+ */
+let getSelectedUser = (id)=>{
+    return new Promise((resolve, reject)=>{
+        UserModel.findById({_id : id})
+        .exec()
+        .then((allRecords)=>{
+            if(allRecords){
+                resolve(allRecords)
+            }else{
+                reject("Error in getting the records");
+            }
+        }).catch((err)=>{
+            console.log('Error in getting the user details');
+            reject(err);
+        });
+    });
+};
 
 
 module.exports = {
     saveNewUser : saveNewUser,
     getAllUser : getAllUser,
     updateUser : updateUser,
-    deleteUser : deleteUser
+    deleteUser : deleteUser,
+    getSelectedUser : getSelectedUser
 }
