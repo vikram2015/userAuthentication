@@ -4,13 +4,16 @@ let bodyParser = require('body-parser');
 let morgan = require('morgan');
 let cors = require('cors');
 let path = require('path');
+var session = require('express-session')
 
 
 let config = require('./config/config');
 let UserRouter = require('./backend/router/user/userRouter');
+let RegisterUser = require('./backend/router/register/registerRouter');
 let HomeRouter = require('./backend/router/home/homeRouter');
+let LoginUser = require('./backend/router/login/loginRouter');
 
-
+const IN_PROD = config.NODE_ENV === 'production'
 let app = express();
 
 //middleware
@@ -20,12 +23,25 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(bodyParser());
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'dist')));
+app.use(session({
+    name:config.SESS_NAME,
+    resave:false,
+    saveUninitialized : false,
+    secret : config.SESS_SECRET,
+    cookie:{
+        maxAge : config.SESS_LIFETIME,
+        sameSite : true,
+        secure : IN_PROD
+    }
+}));
 
 
 //Routes
 
 app.use('/user',UserRouter);
 app.use('/home',HomeRouter);
+app.use('/register',RegisterUser);
+app.use('/login',LoginUser);
 
 
 app.use((data,req, res, next) => {
@@ -45,6 +61,7 @@ app.use((data,req, res, next) => {
 // })
 
 app.get('*', function (req, res, next) {
+    console.log(req.session);
     res.sendFile(path.join(__dirname, 'dist/index.html'));
 })
 

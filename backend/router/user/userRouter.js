@@ -1,6 +1,8 @@
 let express = require('express');
 let router = express.Router();
+let jwt = require('jsonwebtoken');
 let UserOperation = require('../../operation/user/userOperation');
+let config  = require('../../../config/config');
 
 /**
  * 
@@ -38,7 +40,8 @@ router.post('/saveNewUser', function(req, res, next){
  * This is the rest API for getting user
  * 
  */
-router.get('/getUserList', function(req, res){
+router.get('/getUserList', verifyToken , function(req, res){
+    console.log('===== sessionId ========= '+req.sessionID);
     UserOperation.getAllUser().then(function(allUser){
         res.send({
             success : true,
@@ -76,5 +79,35 @@ router.get('/updateUser', function(req, res){
 router.get('/deleteUser', function(req, res){
 
 });
+
+function verifyToken(req, res, next){
+    console.log('-------req.headers in user route-------- '+JSON.stringify(req.headers));
+
+    if(!req.headers.authorization){
+        return res.status(401).send(
+            'Unauthorized request'
+        )
+    }
+    let token = req.headers.authorization.split(' ')[1];
+    console.log('-------token -------- '+token);
+    var decoded = jwt.decode(token);
+    console.log('====== token after decode ======== '+JSON.stringify(decoded));
+    if(token == 'null'){
+        return res.status(401).send(
+            'Unauthorized request'
+        )
+    }
+
+    let payload = jwt.verify(token, config.secretKey);
+    console.log('------- payload ------ '+JSON.stringify(payload));
+    if(!payload){
+        return res.status(401).send(
+            'Unauthorized request'
+        )
+    }
+    console.log('-------- 000000000')
+    req.userId = payload.subject
+    next();
+}
 
 module.exports = router;
