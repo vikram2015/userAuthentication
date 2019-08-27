@@ -8,6 +8,8 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class UserServiceService {
 
+  private formData : Object = {};
+
   constructor(private http : Http) { }
 
   saveUser(parameter){
@@ -29,4 +31,33 @@ export class UserServiceService {
       }
     });
   };
+
+  updateUser(parameter){
+    return this.http.post('/user/updateUser', parameter).map(function (updatedUser) {
+      console.log(updatedUser);
+      let updatedUserList = updatedUser.json();
+      if (updatedUserList.success) {
+        return updatedUserList;
+      }
+    });
+  }
+
+  deleteUser(user){
+    return this.http.post('/user/deleteUser', user).map(function (deletedUser) {
+      console.log(deletedUser);
+      let newDeletedUser = deletedUser.json();
+      if (newDeletedUser.success) {
+        return newDeletedUser   ;
+      }
+    });
+  }
+
+  setFormData(parameter){
+    this.formData = parameter;
+  }
+
+  getFormData(){
+    return this.formData;
+  }
+
 };
