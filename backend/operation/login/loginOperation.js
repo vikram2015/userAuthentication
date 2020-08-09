@@ -1,4 +1,5 @@
 let LoginModel = require('../../model/register/registerModel');
+const bcrypt = require('bcrypt');
 let Promise = require('promise');
 
 let loginUser = (userdetails) =>{
@@ -6,33 +7,37 @@ let loginUser = (userdetails) =>{
         console.log(userdetails.email)
         LoginModel.findOne({user_name: userdetails.email}, (err,user)=>{
             if(err){
-                console.log('000000000000');
                 resolve({
                     MSG:err,
                     status:false
                 })
             }else{
                 if(!user){
-                    console.log('1111111111');
                     resolve({
                         MSG:'Invalid Email',
                         status:false
                     })
                 }else{
-                    console.log('--------user --------- '+user);
-                    if(user.user_password !== userdetails.password){
-                        console.log('222222222');
+                    bcrypt.compare(userdetails.password, user.user_password, function(err, result) {
+                      if(err){
                         resolve({
-                            MSG:'Invalid Password',
-                            status:false
-                        })
-                    }else{
-                        console.log('33333333333');
-                        resolve({
-                            status:true,
-                            user:user
-                        })
-                    }
+                                  MSG : err,
+                                  status : false
+                              })
+                      }else{
+                        if(result == true){
+                              resolve({
+                                status:true,
+                                user:user
+                            })
+                        }else{
+                          resolve({
+                            MSG : 'Error in login',
+                            status:false,
+                          })
+                        }
+                      }
+                    });
                 }
             }
         })

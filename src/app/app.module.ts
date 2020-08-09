@@ -15,6 +15,7 @@ import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './auth.guard';
 import { TokenInterceptorService } from './token-interceptor.service';
 import { HomeService } from './home.service';
+import {FileUploadModule} from 'ng2-file-upload';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { HomeService } from './home.service';
     FormsModule,
     HttpModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FileUploadModule
   ],
   providers: [AuthService, AuthGuard,HomeService,
   {

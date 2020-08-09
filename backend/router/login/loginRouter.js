@@ -9,8 +9,8 @@ let server = require('../../../server');
 
 
 router.post('/loginUser',function(req, res, next){
-    console.log("=========== inside the login user routes========== "+req.body);
-    
+    console.log("=========== inside the login user routes========== "+JSON.stringify(req.body));
+
     LoginOperation.loginUser(req.body).then(function(userDetails){
         console.log('-------userDetails ------- '+JSON.stringify(userDetails));
         if(userDetails.status == true){
@@ -53,7 +53,7 @@ router.post('/logoutUser', function (req, res, next){
                 res.clearCookie(config.SESS_NAME);
                 res.send({
                     success : true,
-                    MSG : 'successfully loggedout'
+                    MSG : 'successfully logged out'
                 })
             }
           })
